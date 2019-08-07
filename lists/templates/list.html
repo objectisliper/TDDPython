@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>To-Do lists</title>
+  <title>Title</title>
 </head>
 <body>
 
@@ -12,6 +12,14 @@
         <input type="text" id="id_new_item" placeholder="Enter a to-do item" name="item_text">
         {% csrf_token %}
     </form>
+
+    <table id="id_list_table">
+        {% for item in items %}
+            <tr>
+                <td>{{ forloop.counter }}: {{ item.text }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 
 </body>
 </html>

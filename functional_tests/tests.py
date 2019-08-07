@@ -111,13 +111,13 @@ class NewVisitorTest(LiveServerTestCase):
 
         self.browser.get(self.live_server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertNotIn('Buy smthng else', page_text)
+        self.assertNotIn('1: Buy smthng else', page_text)
 
         # Enter a name of point
 
         inputbox = self.browser.find_element_by_id('id_new_item')
 
-        inputbox.send_keys('Buy smthng else')
+        inputbox.send_keys('Buy smthng else ese')
 
         # Save changes
 
@@ -129,7 +129,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertNotEqual(francis_list_url, edith_list_url)
 
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertNotIn('Buy smthng else', page_text)
+        self.assertNotIn('1: Buy smthng else', page_text)
 
 
 if __name__ == '__main__':
