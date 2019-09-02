@@ -1,3 +1,4 @@
+import os
 import unittest
 import time
 from functools import wraps
@@ -8,16 +9,19 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.remote.command import Command
 from selenium.webdriver.common.by import By
 
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
     """ New user test """
 
     time_to_wait = 10
 
     def setUp(self) -> None:
         self.browser = webdriver.Chrome()
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            self.live_server_url = 'http://' + staging_server
 
     def tearDown(self) -> None:
         # User quit site
@@ -133,6 +137,30 @@ class NewVisitorTest(LiveServerTestCase):
 
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('1: Buy smthng else ese', page_text)
+
+    def test_layout_and_styling(self):
+
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
+
+        # input at center
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            delta=10
+        )
+
+        # Input still at center on new opened page
+        inputbox.send_keys('testing')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: testing')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            delta=10
+        )
 
 
 if __name__ == '__main__':
