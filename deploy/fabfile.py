@@ -1,11 +1,25 @@
 from fabric.contrib.files import append, exists, sed
 from fabric.api import env, local, run
 import random
+import os
 REPO_URL = 'https://github.com/objectisliper/TDDPython'
+
+'''
+:argument PROJECT - folder where project will live
+:argument SERVER_NAME - ip or domain of server
+:argument SERVER_PORT - port server will listen to
+:argument NODE_PORT - port for pm2, server will try listen to
+:argument CELERY_QUEUES - QUEUES that celery will be listen to
+:argument DAPHNE_PORT - port, that daphne will be listen to
+:argument IS_SSL - bool that decide, is need to use ssl certificate.
+:argument SSL_LOCAL_PATH - local path to ssl certificate and rsa key
+'''
 
 
 def deploy():
-    site_folder = f'/home/{env.user}/sites/{env.host}'
+    project = os.getenv('PROJECT', env.host)
+
+    site_folder = f'/home/{env.user}/sites/{project}'
     source_folder = site_folder + '/source'
     _create_directory_structure_if_necessary(site_folder)
     _get_latest_source(source_folder)
