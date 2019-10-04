@@ -1,31 +1,45 @@
-<html>
-    <head>
-        <title>To-Do lists</title>
-        <link href="/static/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <body>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 offset-md-3 jumbotron">
-                    <div class="text-center">
-                        <h1>{% block header_text %}{% endblock %}</h1>
-                        <form method="POST" action="{% block form_action %}{% endblock %}">
-                        <input name="item_text" id="id_new_item" placeholder="Enter a to-do item" class="form-control input-lg"/>
-                        {% csrf_token %}
-                        </form>
-                    </div>
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title>To-Do lists</title>
+    <link href="/static/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+
+  <body>
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-6 offset-md-3 jumbotron">
+          <div class="text-center">
+            <h1>{% block header_text %}{% endblock %}</h1>
+            <form method="POST" action="{% block form_action %}{% endblock %}">
+              <input name="item_text" id="id_new_item"
+                     class="form-control input-lg"
+                     placeholder="Enter a to-do item" />
+              {% csrf_token %}
+              {% if error %}
+                <div class="form-group has-error">
+                  <span class="help-block">{{ error }}</span>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 offset-md-3">
-                    {% block table %}
-                    {% endblock %}
-                </div>
-            </div>
+              {% endif %}
+            </form>
+          </div>
         </div>
-    </body>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          {% block table %}
+          {% endblock %}
+        </div>
+      </div>
+
+    </div>
+  </body>
+
 </html>
